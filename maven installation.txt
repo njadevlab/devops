@@ -1,4 +1,3 @@
-
 Apache Maven Installation And Setup In AWS EC2 Redhat Instance.
 1. Install JAVA
 		sudo hostnamectl set-hostname maven
