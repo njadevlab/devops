@@ -40,16 +40,79 @@ sudo mv sonarqube-7.8 sonarqube
 sudo chown -R sonar:sonar /opt/sonarqube/
 sudo chmod -R 775 /opt/sonarqube/
 
-6. start sonarQube server
-sh /opt/sonarqube/bin/linux-x86-64/sonar.sh start 
-sh /opt/sonarqube/bin/linux-x86-64/sonar.sh status
+6. #Create Group and User:
 
-7. Ensure that SonarQube is running and Access sonarQube on the browser
-sonarqube default port is = 9000
-get the sonarqube public ip address
-publicIP:9000
-curl -v localhost:9000
-54.236.232.85:9000
+sudo groupadd sonarGroup
 
-default USERNAME: admin
-default password: admin
+7. #Now add the user with directory access
+
+sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonarGroup sonar 
+sudo chown sonar:sonarGroup /opt/sonarqube -R
+
+8. #Edit the sonar script file and set RUN_AS_USER
+
+sudo vi /opt/sonarqube/bin/linux-x86-64/sonar.sh
+
+9. #Add the below line at the bottom of the file 
+
+RUN_AS_USER=sonar
+
+10. #Create Sonar as a service(this will enable to start automatically when you restart the server)
+
+sudo vi /etc/systemd/system/sonar.service
+
+11. #add the below code:
+
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+[Service]
+Type=forking
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+LimitNOFILE=131072
+LimitNPROC=8192
+User=sonar
+Group=sonarGroup
+Restart=always
+[Install]
+WantedBy=multi-user.target
+
+12. #Save the file by entering :wq! 
+13. #Kernel System changes: we must make a few modifications to a couple of kernel system limits files for sonarqube to work.
+
+sudo vi /etc/sysctl.conf
+
+14. #Add the following lines to the bottom of that file:
+
+vm.max_map_count=262144
+fs.file-max=65536
+ 
+15. #Next, we're going to edit limits.conf. Open that file with the command:
+
+sudo vi /etc/security/limits.conf
+
+16. #At the end of this file, add the following: 
+
+sonar   -   nofile   65536
+sonar   -   nproc    4096
+
+17. #Reload system level changes without server boot
+
+sudo sysctl -p
+
+18. #Start SonarQube Now
+
+sudo systemctl start sonar
+sudo systemctl enable sonar
+sudo systemctl status sonar
+
+19. #type q now to come out of this mode. Now execute the below command to see if Sonarqube is up and running. This may take a few minutes.
+20. #check the Sonar logs to make sure there is no error:
+
+tail -f /opt/sonarqube/logs/sonar*.log
+
+#Make sure you get the below message that says sonarqube is up..
+#Now to go to browser --> http://your_SonarQube_publicdns_name:9000/
+
+
