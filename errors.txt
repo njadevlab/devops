@@ -1,0 +1,18 @@
+2023-09-22 02:54:44,796+0000 WARN  [nexus_QuartzSchedulerThread]  *SYSTEM org.sonatype.nexus.quartz.internal.orient.JobStoreImpl - 
+Problem acquiring next triggers: com.orientechnologies.orient.core.exception.OLowDiskSpaceException: 
+Error occurred while executing a write operation to database 'config' due to limited free space on the disk (4030 MB). 
+The database is now working in read-only mode. Please close the database (or stop OrientDB), 
+make room on your hard drive and then reopen the database. The minimal required space is 4096 MB. 
+Required space is now set to 4096MB (you can change it by setting parameter storage.diskCache.diskFreeSpaceLimit) .
+        DB name="config" - occurred 1 times in last 15 seconds
+
+
+nexus@nexus:/opt/nexus$ java -jar ./lib/support/nexus-orient-console.jar
+
+OrientDB console v.2.2.37 (build a7541e7ceeabf592dd9a7b2928b6c023cbc73193, branch 2.2.x) https://www.orientdb.com
+Type 'help' to display all the supported commands.
+orientdb>  CONNECT PLOCAL:/opt/sonatype-work/nexus3/db/component admin admin
+
+Connecting to database [PLOCAL:/opt/sonatype-work/nexus3/db/component] with user 'admin'...
+2023-09-22 03:27:57:591 WARNI Not enough physical memory available for DISKCACHE: 1,897MB (heap=423MB direct=423MB). Set lower Maximum Heap (-Xmx setting on JVM) and restart OrientDB. Now running with DISKCACHE=256MB [OMemoryAndLocalPaginatedEnginesInitializer]OK
+
