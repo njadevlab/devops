@@ -21,7 +21,8 @@ cd /opt
 sudo wget https://download.sonatype.com/nexus/3/nexus-3.60.0-02-unix.tar.gz
 
 sudo tar -zxvf nexus-3.60.0-02-unix.tar.gz
-mv /opt/nexus-3.60.0-02 /opt/nexus
+sudo mv /opt/nexus-3.60.0-02 /opt/nexus
+sudo rm -rf nexus-3.60.0-02-unix.tar.gz
 
 #5 Change the owner and group permissions to /opt/nexus and /opt/sonatype-work directories.
 sudo chown -R nexus:nexus /opt/nexus
@@ -50,6 +51,9 @@ sudo systemctl enable nexus
 sudo systemctl start nexus
 sudo systemctl status nexus
 echo "end of nexus installation"
+
+#monitor logs
+tail -f /opt/sonatype-work/nexus3/log/nexus.log
 
 =====================
 access nexus on the browser
