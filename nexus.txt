@@ -13,7 +13,7 @@ sudo su - nexus
 
 # 1.Install prerequisit: JAVA, git, unzip
 sudo apt install wget git nano unzip -y
-sudo apt-get install openjdk-8-jdk
+sudo apt-get install openjdk-8-jdk -y
 
 # 2. Download nexus software and extract it (unzip)
 cd /opt
