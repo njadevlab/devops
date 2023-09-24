@@ -43,6 +43,9 @@ sudo vi /opt/nexus/bin/nexus.vmoptions
 -XX:MaxDirectMemorySize=512m
 #after making changes, press wq! to come out of the file.
 
+#monitor logs
+tail -f /opt/sonatype-work/nexus3/log/nexus.log
+
 #7 CONFIGURE NEXUS TO RUN AS A SERVICE 
 sudo ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
 
